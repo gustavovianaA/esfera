@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+<title>Esfera</title>
+<style>
+.app-item{
+display : inline-block;
+}
+#esfera{
+height : 300px;
+width : 300px;
+border-radius: 50%;
+background : red;
+-moz-box-shadow: inset 30px -30px 100px #000000;
+-webkit-box-shadow: inset 30px -30px 100px #000000;
+box-shadow: inset 30px -30px 100px 0 #000000;
+}
+.attr{
+display: block;
+width : 600px;
+}
+</style>
+</head>
+<body>
+<div class="app-item" id="esfera"></div>
+<div class="app-item"> 
+<form>
+<div class="attrHolder"><input id="attr1" class="attr" type="range" min="-300" max="300" /></div>
+<input id="attr2" class="attr" type="range" min="-300" max="300" />
+<input id="attr3" class="attr" type="range" min="-300" max="300" />
+<input id="attr4" class="attr" type="range" min="-300" max="300" />
+</form>
+</div>
+<div id="elementStyle">
+<pre>
+#esfera{
+height : 300px;
+width : 300px;
+border-radius: 50%;
+background : red;
+-moz-box-shadow: inset 30px -30px 100px #000000;
+-webkit-box-shadow: inset 30px -30px 100px #000000;
+box-shadow: inset 30px -30px 100px 0 #000000;
+}
+</pre>
+</div>
+</body>
+<script
+  src="https://code.jquery.com/jquery-3.5.0.min.js"
+  integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
+  crossorigin="anonymous"></script>
+<script>
+$(function(){
+function changeCssOutput(newState){
+css = `${cssOutput} 
+-moz-box-shadow: ${newState};
+-webkit-box-shadow: ${newState};
+box-shadow: ${newState};
+}`;
+$('#elementStyle pre').text(css); 
+}
+function getCurrentState(){
+	var state =  $('#esfera').css('box-shadow');
+	var stateParts = state.split(' ');
+	return stateParts; 
+}
+function changeCurrentState(state,attrTarget,n){
+	//exclud first 3 state(array) elemets(rgb params)	
+	n = n+3;	
+	var attr  = [state[0] , state[1], state[2] ,state[3] , state[4] , state[5] ,state[6] , 		state[7]];
+	attr[n] = attrTarget+'px';	
+	var newState = '';	
+	for(var i = 0 ; i <= 7 ; i++){
+	newState += ' '+attr[i];	
+	}	
+	$('#esfera').css('boxShadow' , newState);
+	changeCssOutput(newState);
+}
+function changeAttr(attr,n){			
+	var currentState = getCurrentState();
+	changeCurrentState(currentState,attr,n);
+}	
+	//change sphere
+	$('.attr').on('input', function () {
+    	$(this).trigger('change');
+	});
+	$('.attr').change(function(){
+	var attrPosition  = $(this).index();	
+	changeAttr($(this).val(),attrPosition);
+	});
+	//load default values	
+	$('#attr1').val(30);
+	$('#attr2').val(-30);
+	$('#attr3').val(100);
+	$('#attr4').val(0);
+	const cssOutput = `#esfera{
+height : 300px;
+width : 300px;
+border-radius: 50%;
+background : red;`;
+});
+</script>
+</html>
